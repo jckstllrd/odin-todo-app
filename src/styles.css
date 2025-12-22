@@ -51,7 +51,7 @@ body {
 }
 
 .new-project {
-      border-radius: 10px;
+  border-radius: 10px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -60,7 +60,6 @@ body {
 
 .content {
   grid-area: content;
-  border: 1px solid black;
   display: flex;
   gap: 10px;
   justify-content: center;
@@ -79,13 +78,13 @@ body {
 }
 
 .btn {
-    padding: 0;
-    height: 5%;
-    border: none;
+  padding: 0;
+  height: 50px;
+  border: none;
 }
 
 .btn:hover {
-    color: black;
+  color: black;
 }
 
 /* Todo styling */
@@ -97,6 +96,31 @@ body {
   background-color: var(--primary-dbg-colour);
 }
 
+/* New Todo Dialog */
+dialog {
+  height: 50%;
+  width: 50%;
+  gap: 10px;
+  justify-content: center;
+  flex-direction: column;
+}
 
+/* dialog::backdrop {
+  background-color: rgba(1, 1, 1, 0.5)
+} */
+
+
+
+.todo-buttons {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.dialog-btn {
+  width: 100px;
+
+}
 
 
