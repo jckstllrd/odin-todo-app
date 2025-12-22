@@ -42,6 +42,20 @@ body {
 
 .sidebar {
   grid-area: sidebar;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  padding: 50px 25px;
+  height: auto;
+  flex-direction: column;
+}
+
+.new-project {
+      border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: var(--primary-dbg-colour);
 }
 
 .content {
@@ -64,9 +78,14 @@ body {
   gap: 10px;
 }
 
-.new-todo-btn {
+.btn {
     padding: 0;
     height: 5%;
+    border: none;
+}
+
+.btn:hover {
+    color: black;
 }
 
 /* Todo styling */
