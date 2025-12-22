@@ -54,7 +54,6 @@ submitTodoBtn.addEventListener("click", (e) => {
     let dueDate = form.dueDate.value 
     let priority = form.priority.value 
     console.log(title, description, dueDate, priority);
-    
-    console.log(e.target.form.title.value);
+    form.reset()
     todoDialog.close()
 })
