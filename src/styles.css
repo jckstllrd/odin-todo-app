@@ -1,4 +1,57 @@
 * {
-    color: purple;
+  /* border: 1px solid black; */
+  height: 100%;
+  color: #FECDAA;
 }
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+/* Setting up the dashboard grid  */
+
+.grid {
+  display: grid;
+  grid-template-areas: "header header" "sidebar content";
+  grid-template-rows: 70px 1fr;
+  grid-template-columns: 280px 1fr;
+}
+
+/* Adding responsiveness on mobile */
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: 70px auto 1fr;
+    grid-template-areas:
+      "header"
+      "sidebar"
+      "main";
+  }
+}
+
+.header {
+  grid-area: header;
+  background-color: #4B644A;
+}
+
+
+.sidebar {
+  grid-area: sidebar;
+  background-color: #4B644A;
+}
+
+.content {
+  grid-area: content;
+  background-color: #89A894;
+  display: grid;
+  height: auto;
+  padding: 50px;
+}
+
+.todo-list {
+    border: 1px solid black;
+}
+
 
