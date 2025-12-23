@@ -27,8 +27,10 @@ let projectArray = localStorage.getItem("projects")
   : [];
 
 
+console.log(projectArray.todos.length);
+  
 
-let activeProject;
+// let activeProject;
 
 if (projectArray.length == 0) {
     console.log('no projects: adding default');
@@ -38,8 +40,13 @@ if (projectArray.length == 0) {
     projectArray.push(defaultProject)
 }
 
+console.log('hereo;in');
+console.log(projectArray);
+
 
 for(let i = 0; i < projectArray.length; i++) {
+    console.log('here now');
+    
     console.log('projects exist, finding active');
     
     if (projectArray[i].active) {
@@ -56,11 +63,15 @@ let todosDOM = document.querySelector(".todo-list");
 function setActiveProject(project) {
     activeProject.toggleActive()
     project.toggleActive()
-  activeProject = project;
+    activeProject = project;
 }
 
 
+
+
 function displayTodo(todo) {
+    console.log(todo);
+    
   console.log("displaying todo");
       const todoDiv = document.createElement("div");
     todoDiv.classList.toggle("todo");
@@ -215,12 +226,18 @@ closeProjectDialog.addEventListener("click", () => {
   projectDialog.close();
 });
 
+function createProject(title, description) {
+
+}
+
 submitProjectBtn.addEventListener("click", (e) => {
   e.preventDefault();
   let form = e.target.form;
   let title = form.title.value;
   let description = form.description.value;
+
   console.log(title, description);
+  createProject()
   form.reset();
   projectDialog.close();
 });
