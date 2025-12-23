@@ -1,10 +1,6 @@
 import "./styles.css";
 
-let projectArray = localStorage.getItem("projects")
-  ? JSON.parse(localStorage.getItem("projects"))
-  : [];
-let todosDOM = document.querySelector(".todo-list");
-let activeProject;
+
 class Todo {
   constructor(title, description, dueDate, priority) {
     this.title = title;
@@ -26,9 +22,43 @@ class Project {
   }
 }
 
+let projectArray = localStorage.getItem("projects")
+  ? JSON.parse(localStorage.getItem("projects"))
+  : [];
+
+
+
+let activeProject;
+
+if (projectArray.length == 0) {
+    console.log('no projects: adding default');
+    
+    let defaultProject = new Project('default')
+    defaultProject.toggleActive()
+    projectArray.push(defaultProject)
+}
+
+
+for(let i = 0; i < projectArray.length; i++) {
+    console.log('projects exist, finding active');
+    
+    if (projectArray[i].active) {
+        activeProject = projectArray[i]
+        console.log('found active project', activeProject);
+    }
+}
+
+console.log(projectArray);
+
+let todosDOM = document.querySelector(".todo-list");
+
+
 function setActiveProject(project) {
+    activeProject.toggleActive()
+    project.toggleActive()
   activeProject = project;
 }
+
 
 function displayTodo(todo) {
   console.log("displaying todo");
@@ -73,6 +103,7 @@ function displayTodo(todo) {
   delBtn.classList.toggle("todo-delete");
   delBtn.classList.toggle("btn");
   delBtn.textContent = "x";
+  delBtn.addEventListener("click", (e) => {removeTodo(e)})
 
   todoDel.appendChild(delBtn)
   todoItem.appendChild(todoDel)
@@ -99,11 +130,17 @@ function displayTodo(todo) {
   //   todosDOM.appendChild(todoDiv);
 }
 
+function removeTodo(e) {
+    console.log(e);
+    
+}
+
+
 function createNewTodo(title, description, dueDate, priority, project) {
   let todo = new Todo(title, description, dueDate, priority);
   project.todos.push(todo);
   console.log("creating todo");
-
+    localStorage.setItem("projects", JSON.stringify(project))
   displayTodo(todo);
 }
 
@@ -188,6 +225,4 @@ submitProjectBtn.addEventListener("click", (e) => {
   projectDialog.close();
 });
 
-const defaultProject = new Project("default");
 
-setActiveProject(defaultProject);
