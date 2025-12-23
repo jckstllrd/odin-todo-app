@@ -30,36 +30,80 @@ function setActiveProject(project) {
   activeProject = project;
 }
 
-
 function displayTodo(todo) {
-    console.log('displaying todo');
-    
-  const todoDiv = document.createElement("div");
-  todoDiv.classList.toggle("todo");
-  const title = document.createElement("p");
+  console.log("displaying todo");
+      const todoDiv = document.createElement("div");
+    todoDiv.classList.toggle("todo");
+
+  const todoItem = document.createElement("div");
+  todoItem.classList.toggle("todo-item");
+
+  const todoContent = document.createElement("div");
+  todoContent.classList.toggle("todo-content");
+
+  const todoDue = document.createElement("div");
+  todoDue.classList.toggle("todo-due");
+
+  const todoDel = document.createElement("div");
+  todoDel.classList.toggle("todo-delete-div");
+
+  const title = document.createElement("h3");
   title.textContent = todo.title;
-  todoDiv.appendChild(title);
 
-  const description = document.createElement("p");
-  description.textContent = todo.description;
-  todoDiv.appendChild(description);
+  const desc = document.createElement("p");
+  desc.textContent = todo.description;
 
-  const dueDate = document.createElement("p");
-  dueDate.textContent = todo.dueDate;
-  todoDiv.appendChild(dueDate);
+  todoContent.appendChild(title);
+  todoContent.appendChild(desc);
+  todoItem.appendChild(todoContent);
 
-  const priority = document.createElement("p");
-  priority.textContent = todo.priority;
-  todoDiv.appendChild(priority);
+  const due = document.createElement("p");
+  due.classList.toggle("due");
+  due.textContent = "Due: ";
 
-  todosDOM.appendChild(todoDiv);
+  const date = document.createElement("p");
+  date.classList.toggle("date");
+  date.textContent = todo.dueDate;
+
+  todoDue.appendChild(due);
+  todoDue.appendChild(date);
+  todoItem.appendChild(todoDue);
+
+  const delBtn = document.createElement("button");
+  delBtn.classList.toggle("todo-delete");
+  delBtn.classList.toggle("btn");
+  delBtn.textContent = "x";
+
+  todoDel.appendChild(delBtn)
+  todoItem.appendChild(todoDel)
+  todoDiv.appendChild(todoItem)
+  todosDOM.appendChild(todoDiv)
+
+
+  //   const title = document.createElement("p");
+  //   title.textContent = todo.title;
+  //   todoDiv.appendChild(title);
+
+  //   const description = document.createElement("p");
+  //   description.textContent = todo.description;
+  //   todoDiv.appendChild(description);
+
+  //   const dueDate = document.createElement("p");
+  //   dueDate.textContent = todo.dueDate;
+  //   todoDiv.appendChild(dueDate);
+
+  //   const priority = document.createElement("p");
+  //   priority.textContent = todo.priority;
+  //   todoDiv.appendChild(priority);
+
+  //   todosDOM.appendChild(todoDiv);
 }
 
 function createNewTodo(title, description, dueDate, priority, project) {
   let todo = new Todo(title, description, dueDate, priority);
   project.todos.push(todo);
-  console.log('creating todo');
-  
+  console.log("creating todo");
+
   displayTodo(todo);
 }
 
@@ -120,7 +164,7 @@ submitTodoBtn.addEventListener("click", (e) => {
   let dueDate = form.dueDate.value;
   let priority = form.priority.value;
   console.log(title, description, dueDate, priority);
-  createNewTodo(title, description, dueDate, priority, activeProject)
+  createNewTodo(title, description, dueDate, priority, activeProject);
   form.reset();
   todoDialog.close();
 });
@@ -144,6 +188,6 @@ submitProjectBtn.addEventListener("click", (e) => {
   projectDialog.close();
 });
 
-const defaultProject = new Project('default')
+const defaultProject = new Project("default");
 
-setActiveProject(defaultProject)
+setActiveProject(defaultProject);
