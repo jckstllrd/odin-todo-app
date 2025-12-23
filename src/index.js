@@ -1,12 +1,28 @@
 import "./styles.css";
 
-let defaultProject = {};
-let myProject = {};
+let projectArray = localStorage.getItem("projects")
+  ? JSON.parse(localStorage.getItem("projects"))
+  : [];
+let todosDOM = document.querySelector(".todo-list");
 let activeProject;
-
 class Todo {
+  constructor(title, description, dueDate, priority) {
+    this.title = title;
+    this.description = description;
+    this.dueDate = dueDate;
+    this.priority = priority;
+  }
+}
+
+class Project {
   constructor(title) {
     this.title = title;
+    this.todos = [];
+    this.active = false;
+  }
+
+  toggleActive() {
+    this.active = this.active ? false : true;
   }
 }
 
@@ -14,7 +30,38 @@ function setActiveProject(project) {
   activeProject = project;
 }
 
-setActiveProject(defaultProject);
+
+function displayTodo(todo) {
+    console.log('displaying todo');
+    
+  const todoDiv = document.createElement("div");
+  todoDiv.classList.toggle("todo");
+  const title = document.createElement("p");
+  title.textContent = todo.title;
+  todoDiv.appendChild(title);
+
+  const description = document.createElement("p");
+  description.textContent = todo.description;
+  todoDiv.appendChild(description);
+
+  const dueDate = document.createElement("p");
+  dueDate.textContent = todo.dueDate;
+  todoDiv.appendChild(dueDate);
+
+  const priority = document.createElement("p");
+  priority.textContent = todo.priority;
+  todoDiv.appendChild(priority);
+
+  todosDOM.appendChild(todoDiv);
+}
+
+function createNewTodo(title, description, dueDate, priority, project) {
+  let todo = new Todo(title, description, dueDate, priority);
+  project.todos.push(todo);
+  console.log('creating todo');
+  
+  displayTodo(todo);
+}
 
 let content = document.querySelector(".content");
 
@@ -73,6 +120,7 @@ submitTodoBtn.addEventListener("click", (e) => {
   let dueDate = form.dueDate.value;
   let priority = form.priority.value;
   console.log(title, description, dueDate, priority);
+  createNewTodo(title, description, dueDate, priority, activeProject)
   form.reset();
   todoDialog.close();
 });
@@ -83,7 +131,7 @@ openProjectDialog.addEventListener("click", () => {
 });
 
 closeProjectDialog.addEventListener("click", () => {
-  ProjectDialog.close();
+  projectDialog.close();
 });
 
 submitProjectBtn.addEventListener("click", (e) => {
@@ -95,3 +143,7 @@ submitProjectBtn.addEventListener("click", (e) => {
   form.reset();
   projectDialog.close();
 });
+
+const defaultProject = new Project('default')
+
+setActiveProject(defaultProject)
