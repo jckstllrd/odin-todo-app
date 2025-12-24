@@ -28,23 +28,28 @@ function toggleActive(project) {
 function setActiveProject(project) {
   if (activeProject === undefined) {
     toggleActive(project);
-    let activeProject = project;
+    activeProject = project;
   } else {
     toggleActive(activeProject);
 
     toggleActive(project);
     activeProject = project;
     projectsDOM.textContent = "";
+    todosDOM.textContent = "";
     projectArray.forEach((project) => {
       console.log(project);
 
+      console.log("about to display project");
+
       displayProject(project);
-      activeProject.todos.forEach((todo) => {
-        console.log("showing todos");
-        displayTodo(todo);
-      });
+
+      console.log("project displayed");
     });
   }
+  activeProject.todos.forEach((todo) => {
+    console.log("showing todos");
+    displayTodo(todo);
+  });
 }
 
 function displayTodo(todo) {
@@ -104,12 +109,35 @@ function displayTodo(todo) {
 
 function removeTodo(e) {
   console.log(e);
+  let todoDiv = e.target.parentNode.parentNode.parentNode;
+  let todoList = todoDiv.parentNode;
+  console.log(todoDiv, todoList);
+  let todoTitle =
+    e.target.parentNode.parentNode.firstChild.firstChild.innerHTML;
+  console.log(todoTitle);
+
+  console.log("finding todo in active project");
+  console.log(activeProject.todos);
+
+  activeProject.todos.forEach((todo) => {
+    if (todo.title == todoTitle) {
+      console.log("found a matching todo", todo);
+      let index = activeProject.todos.indexOf(todo);
+      activeProject.todos.splice(index, 1);
+      console.log();
+    }
+  });
+
+  localStorage.setItem("projects", JSON.stringify(projectArray));
+  setActiveProject(activeProject);
+  console.log(activeProject.todos);
 }
 
 function createNewTodo(title, description, dueDate, priority, project) {
   let todo = new Todo(title, description, dueDate, priority);
   project.todos.push(todo);
   console.log("creating todo");
+
   localStorage.setItem("projects", JSON.stringify(projectArray));
   displayTodo(todo);
 }
@@ -196,7 +224,7 @@ function initialiseDOM() {
 }
 
 function displayProject(project) {
-  console.log("displaying project");
+  console.log("displaying project", project);
 
   const projectDiv = document.createElement("div");
   projectDiv.classList.toggle("project");
@@ -214,47 +242,58 @@ function displayProject(project) {
   if (project.active) {
     projectDiv.appendChild(activeDiv);
   }
+  projectDiv.addEventListener("click", (e) => {
+    console.log("setting new active project", e);
+
+    setActiveProject(project);
+  });
   projectDiv.appendChild(projectTitle);
   projectsDOM.appendChild(projectDiv);
 }
 
 function createProject(title) {
   let project = new Project(title);
+  projectArray.push(project);
   setActiveProject(project);
-  displayProject(project);
-  projectArray.push();
+  console.log("inside createProject, displaying again");
+  console.log(
+    "before adding project to array",
+    projectArray,
+    typeof projectArray
+  );
+
+  console.log(projectArray);
+
+  localStorage.setItem("projects", JSON.stringify(projectArray));
+  console.log("after adding project to array", typeof projectArray);
 }
 
-function initialiseLocalStorage(activeProject) {
+function initialiseLocalStorage() {
   projectArray = localStorage.getItem("projects")
     ? JSON.parse(localStorage.getItem("projects"))
     : [];
-
-  console.log(projectArray.length);
+  console.log(projectArray);
 
   if (projectArray.length == 0) {
-    console.log("no projects: adding default");
-
     let defaultProject = new Project("default");
-    console.log("created default");
-
     setActiveProject(defaultProject);
     projectArray.push(defaultProject);
-    console.log("active project set");
   }
 
   for (let i = 0; i < projectArray.length; i++) {
-    console.log("here now");
+    // console.log("here now");
 
-    console.log("projects exist, finding active");
+    // console.log("projects exist, finding active");
 
     if (projectArray[i].active) {
       activeProject = projectArray[i];
-      console.log("found active project", activeProject);
+      // console.log("found active project", activeProject);
     }
   }
+  console.log(projectArray);
 
-  return projectArray, activeProject;
+  console.log(typeof projectArray);
+  console.log(projectArray);
 }
 
 // Running the app
@@ -263,12 +302,25 @@ let projectArray;
 let todosDOM = document.querySelector(".todo-list");
 let projectsDOM = document.querySelector(".project-list");
 
+console.log(activeProject, projectArray);
+// localStorage.clear()
 initialiseDOM();
-projectArray, activeProject = initialiseLocalStorage(activeProject);
+initialiseLocalStorage();
 
-activeProject.todos.forEach((todo) => {
-  displayTodo(todo);
-});
+console.log(activeProject, projectArray);
+// console.log('logging both');
+// console.log(typeof(projectArray), typeof(activeProject));
+
+// console.log(projectArray, activeProject);
+
+// console.log("type of data type", typeof projectArray);
+// console.log(activeProject);
+
+if (activeProject.todos) {
+  activeProject.todos.forEach((todo) => {
+    displayTodo(todo);
+  });
+}
 
 projectArray.forEach((project) => {
   displayProject(project);
