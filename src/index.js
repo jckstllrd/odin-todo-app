@@ -50,6 +50,7 @@ function setActiveProject(project) {
     console.log("showing todos");
     displayTodo(todo);
   });
+  localStorage.setItem('projects', JSON.stringify(projectArray))
 }
 
 function displayTodo(todo) {
