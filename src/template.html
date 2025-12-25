@@ -28,47 +28,53 @@
           </form>
         </dialog>
         <button class="open-project-dialog btn">Add New Project</button>
-        <div class="project-list">
-        </div>
+        <div class="project-list"></div>
       </div>
       <div class="content">
         <dialog class="todo-dialog">
-          <form>
-            <div>
-              <label for="title">Title:</label> <input type="text" id="title" />
-            </div>
-            <div>
-              <label for="description">Description:</label>
-              <input type="text" id="description" />
-            </div>
-            <div>
-              <label for="dueDate">Due Date:</label>
-              <input type="date" name="dueDate" id="dueDate" />
-            </div>
-            <div>
-              <input type="radio" name="priority" id="priority" value="high" />
-              <label for="priority">High Priority</label>
-              <input
-                type="radio"
-                name="priority"
-                id="priority"
-                value="med"
-              /><label for="priority">Med Priority</label>
-              <input
-                type="radio"
-                name="priority"
-                id="priority"
-                value="low"
-              /><label for="priority">Low Priority</label>
-            </div>
-
-            <div class="todo-buttons">
-              <button class="close-todo-dialog btn" formmethod="dialog">
-                Close
-              </button>
-              <button class="create-todo btn" type="submit">Add</button>
-            </div>
-          </form>
+          <div class="dialog-div">
+            <form class="todo-form">
+              <div>
+                <label for="title">Title:</label>
+                <input type="text" id="title" />
+              </div>
+              <div>
+                <label for="description">Description:</label>
+                <input type="text" id="description" />
+              </div>
+              <div>
+                <label for="dueDate">Due Date:</label>
+                <input type="date" name="dueDate" id="dueDate" />
+              </div>
+              <div class="radio-options">
+                <input
+                  type="radio"
+                  name="priority"
+                  id="priority"
+                  value="high"
+                />
+                <label for="priority">High Priority</label>
+                <input
+                  type="radio"
+                  name="priority"
+                  id="priority"
+                  value="med"
+                /><label for="priority">Med Priority</label>
+                <input
+                  type="radio"
+                  name="priority"
+                  id="priority"
+                  value="low"
+                /><label for="priority">Low Priority</label>
+              </div>
+              <div class="todo-buttons">
+                <button class="close-todo-dialog dialog-btn" formmethod="dialog">
+                  Close
+                </button>
+                <button class="create-todo dialog-btn" type="submit">Add</button>
+              </div>
+            </form>
+          </div>
         </dialog>
         <button class="open-todo-dialog btn">Add New Todo</button>
         <div class="todo-list">
