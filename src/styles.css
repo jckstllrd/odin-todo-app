@@ -193,13 +193,28 @@ h3 {
 
 .project {
   display: flex;
+  justify-content: space-between;
   gap: 10px;
   height: 50px;
 }
 
-.project:hover > *,
-.project:hover > * > * {
+
+.project h2:hover {
   color: peachpuff;
+}
+
+.active-div {
+  color: peachpuff;
+}
+
+.project-del {
+  background: none;
+  border: none;
+  color: none;
+}
+
+.project-del:hover {
+  color: red;
 }
 
 /* Todo dialog box */

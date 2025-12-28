@@ -18,11 +18,7 @@ class Project {
 }
 
 function toggleActive(project) {
-  console.log("before toggling", project.active);
-
   project.active = project.active ? false : true;
-
-  console.log("after toggling", project.active);
 }
 
 function setActiveProject(project) {
@@ -37,26 +33,16 @@ function setActiveProject(project) {
     projectsDOM.textContent = "";
     todosDOM.textContent = "";
     projectArray.forEach((project) => {
-      console.log(project);
-
-      console.log("about to display project");
-
       displayProject(project);
-
-      console.log("project displayed");
     });
   }
   activeProject.todos.forEach((todo) => {
-    console.log("showing todos");
     displayTodo(todo);
   });
-  localStorage.setItem('projects', JSON.stringify(projectArray))
+  localStorage.setItem("projects", JSON.stringify(projectArray));
 }
 
 function displayTodo(todo) {
-  console.log(todo);
-
-  console.log("displaying todo");
   const todoDiv = document.createElement("div");
   todoDiv.classList.toggle("todo");
 
@@ -109,35 +95,26 @@ function displayTodo(todo) {
 }
 
 function removeTodo(e) {
-  console.log(e);
   let todoDiv = e.target.parentNode.parentNode.parentNode;
   let todoList = todoDiv.parentNode;
-  console.log(todoDiv, todoList);
+
   let todoTitle =
     e.target.parentNode.parentNode.firstChild.firstChild.innerHTML;
-  console.log(todoTitle);
-
-  console.log("finding todo in active project");
-  console.log(activeProject.todos);
 
   activeProject.todos.forEach((todo) => {
     if (todo.title == todoTitle) {
-      console.log("found a matching todo", todo);
       let index = activeProject.todos.indexOf(todo);
       activeProject.todos.splice(index, 1);
-      console.log();
     }
   });
 
   localStorage.setItem("projects", JSON.stringify(projectArray));
   setActiveProject(activeProject);
-  console.log(activeProject.todos);
 }
 
 function createNewTodo(title, description, dueDate, priority, project) {
   let todo = new Todo(title, description, dueDate, priority);
   project.todos.push(todo);
-  console.log("creating todo");
 
   localStorage.setItem("projects", JSON.stringify(projectArray));
   displayTodo(todo);
@@ -182,7 +159,6 @@ function initialiseDOM() {
 
   openTodoDialog.addEventListener("click", () => {
     todoDialog.showModal();
-    console.log("opening dialog");
   });
 
   closeTodoDialog.addEventListener("click", () => {
@@ -196,7 +172,6 @@ function initialiseDOM() {
     let description = form.description.value;
     let dueDate = form.dueDate.value;
     let priority = form.priority.value;
-    console.log(title, description, dueDate, priority);
     createNewTodo(title, description, dueDate, priority, activeProject);
     form.reset();
     todoDialog.close();
@@ -208,7 +183,6 @@ function initialiseDOM() {
     let title = form.title.value;
     let description = form.description.value;
 
-    console.log(title, description);
     createProject(title);
     form.reset();
     projectDialog.close();
@@ -216,7 +190,6 @@ function initialiseDOM() {
 
   openProjectDialog.addEventListener("click", () => {
     projectDialog.showModal();
-    console.log("opening dialog");
   });
 
   closeProjectDialog.addEventListener("click", () => {
@@ -224,9 +197,21 @@ function initialiseDOM() {
   });
 }
 
-function displayProject(project) {
-  console.log("displaying project", project);
+function deleteProject(projectTitle) {
+  let index;
 
+  for (let i = 0; i < projectArray.length; i++) {
+    if (projectTitle == projectArray[i].title) {
+      index = i;
+    }
+  }
+
+  projectArray.splice(index, 1);
+  localStorage.setItem("projects", projectArray);
+  setActiveProject(projectArray[0]);
+}
+
+function displayProject(project) {
   const projectDiv = document.createElement("div");
   projectDiv.classList.toggle("project");
 
@@ -238,17 +223,32 @@ function displayProject(project) {
   activeDiv.appendChild(activeSign);
 
   const projectTitle = document.createElement("h2");
+  projectTitle.classList.toggle("project-title");
   projectTitle.textContent = project.title;
+
+  const delBtn = document.createElement("button");
+  delBtn.classList.toggle("project-del");
+  delBtn.textContent = "x";
+
+  delBtn.addEventListener("click", (e) => {
+    let title = e.target.parentElement.childNodes[0].innerHTML;
+    if (e.target.parentElement.children.length == 3) {
+      title = e.target.parentElement.childNodes[1].innerHTML;
+    }
+    deleteProject(title);
+  });
 
   if (project.active) {
     projectDiv.appendChild(activeDiv);
   }
-  projectDiv.addEventListener("click", (e) => {
-    console.log("setting new active project", e);
-
+  projectTitle.addEventListener("click", (e) => {
     setActiveProject(project);
   });
   projectDiv.appendChild(projectTitle);
+  if (project.title != "default") {
+    projectDiv.appendChild(delBtn);
+  }
+
   projectsDOM.appendChild(projectDiv);
 }
 
@@ -256,24 +256,13 @@ function createProject(title) {
   let project = new Project(title);
   projectArray.push(project);
   setActiveProject(project);
-  console.log("inside createProject, displaying again");
-  console.log(
-    "before adding project to array",
-    projectArray,
-    typeof projectArray
-  );
-
-  console.log(projectArray);
-
   localStorage.setItem("projects", JSON.stringify(projectArray));
-  console.log("after adding project to array", typeof projectArray);
 }
 
 function initialiseLocalStorage() {
   projectArray = localStorage.getItem("projects")
     ? JSON.parse(localStorage.getItem("projects"))
     : [];
-  console.log(projectArray);
 
   if (projectArray.length == 0) {
     let defaultProject = new Project("default");
@@ -282,19 +271,22 @@ function initialiseLocalStorage() {
   }
 
   for (let i = 0; i < projectArray.length; i++) {
-    // console.log("here now");
-
-    // console.log("projects exist, finding active");
-
     if (projectArray[i].active) {
       activeProject = projectArray[i];
-      // console.log("found active project", activeProject);
     }
   }
-  console.log(projectArray);
+}
 
-  console.log(typeof projectArray);
-  console.log(projectArray);
+function refreshPage() {
+  if (activeProject) {
+    activeProject.todos.forEach((todo) => {
+      displayTodo(todo);
+    });
+  }
+
+  projectArray.forEach((project) => {
+    displayProject(project);
+  });
 }
 
 // Running the app
@@ -303,26 +295,10 @@ let projectArray;
 let todosDOM = document.querySelector(".todo-list");
 let projectsDOM = document.querySelector(".project-list");
 
-console.log(activeProject, projectArray);
 // localStorage.clear()
 initialiseDOM();
 initialiseLocalStorage();
+refreshPage();
 
-console.log(activeProject, projectArray);
-// console.log('logging both');
-// console.log(typeof(projectArray), typeof(activeProject));
+console.log(projectArray);
 
-// console.log(projectArray, activeProject);
-
-// console.log("type of data type", typeof projectArray);
-// console.log(activeProject);
-
-if (activeProject.todos) {
-  activeProject.todos.forEach((todo) => {
-    displayTodo(todo);
-  });
-}
-
-projectArray.forEach((project) => {
-  displayProject(project);
-});
